@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OYNA - Найти игру в волейбол</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: white;
+        }
+        .game-card {
+            transition: opacity 0.2s;
+        }
+        .game-card:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body class="font-sans bg-white">
+    <!-- Header -->
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-black">OYNA</h1>
+            
+            <nav class="flex space-x-6">
+                <button id="showGamesBtn" class="text-black font-medium hover:opacity-70">Найти игру</button>
+                <button id="showCreateBtn" class="text-black font-medium hover:opacity-70">Создать игру</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content: Games List -->
+    <main id="gamesList" class="container mx-auto px-4 py-12">
+        <h2 class="text-3xl font-bold text-black mb-8">Игры</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Game Card 1 -->
+            <div class="game-card border border-gray-200 p-6 cursor-pointer" data-game-id="1">
+                <div class="mb-4">
+                    <span class="text-sm text-gray-500">Волейбол</span>
+                </div>
+                <h3 class="text-xl font-bold text-black mb-2">Спорткомплекс "Достык"</h3>
+                <p class="text-gray-600 mb-4">ул. Достык, 13</p>
+                <div class="space-y-2 mb-4">
+                    <p class="text-black"><strong>Дата:</strong> Сегодня, 18:00 - 20:00</p>
+                    <p class="text-black"><strong>Уровень:</strong> Любительский</p>
+                    <p class="text-black"><strong>Мест:</strong> <span class="text-gray-600">5 из 12</span></p>
+                </div>
+                <button class="w-full bg-black text-white py-3 font-medium hover:opacity-90">
+                    Смотреть
+                </button>
+            </div>
+
+            <!-- Game Card 2 -->
+            <div class="game-card border border-gray-200 p-6 cursor-pointer" data-game-id="2">
+                <div class="mb-4">
+                    <span class="text-sm text-gray-500">Волейбол</span>
+                </div>
+                <h3 class="text-xl font-bold text-black mb-2">Зал "Олимпийский"</h3>
+                <p class="text-gray-600 mb-4">пр. Туран, 24</p>
+                <div class="space-y-2 mb-4">
+                    <p class="text-black"><strong>Дата:</strong> Завтра, 19:00 - 21:00</p>
+                    <p class="text-black"><strong>Уровень:</strong> Полупрофессиональный</p>
+                    <p class="text-black"><strong>Мест:</strong> <span class="text-gray-600">3 из 14</span></p>
+                </div>
+                <button class="w-full bg-black text-white py-3 font-medium hover:opacity-90">
+                    Смотреть
+                </button>
+            </div>
+
+            <!-- Game Card 3 -->
+            <div class="game-card border border-gray-200 p-6 cursor-pointer" data-game-id="3">
+                <div class="mb-4">
+                    <span class="text-sm text-gray-500">Волейбол</span>
+                </div>
+                <h3 class="text-xl font-bold text-black mb-2">Фитнес клуб "Energy"</h3>
+                <p class="text-gray-600 mb-4">ул. Кунаева, 12/1</p>
+                <div class="space-y-2 mb-4">
+                    <p class="text-black"><strong>Дата:</strong> Пт, 14 июл, 20:00 - 22:30</p>
+                    <p class="text-black"><strong>Уровень:</strong> Любительский</p>
+                    <p class="text-black"><strong>Мест:</strong> <span class="text-gray-600">8 из 12</span></p>
+                </div>
+                <button class="w-full bg-black text-white py-3 font-medium hover:opacity-90">
+                    Смотреть
+                </button>
+            </div>
+
+            <!-- Game Card 4 -->
+            <div class="game-card border border-gray-200 p-6 cursor-pointer" data-game-id="4">
+                <div class="mb-4">
+                    <span class="text-sm text-gray-500">Волейбол</span>
+                </div>
+                <h3 class="text-xl font-bold text-black mb-2">Спорткомплекс "Достык"</h3>
+                <p class="text-gray-600 mb-4">ул. Достык, 13</p>
+                <div class="space-y-2 mb-4">
+                    <p class="text-black"><strong>Дата:</strong> Сб, 15 июл, 18:00 - 20:00</p>
+                    <p class="text-black"><strong>Уровень:</strong> Полупрофессиональный</p>
+                    <p class="text-black"><strong>Мест:</strong> <span class="text-gray-600">11 из 14</span></p>
+                </div>
+                <button class="w-full bg-black text-white py-3 font-medium hover:opacity-90">
+                    Смотреть
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Game Details Modal -->
+    <div id="gameDetailsModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white max-w-2xl w-full mx-4 p-8">
+            <div class="flex justify-between items-start mb-6">
+                <h2 class="text-3xl font-bold text-black">Детали игры</h2>
+                <button id="closeGameDetails" class="text-gray-500 hover:text-black text-2xl">&times;</button>
+            </div>
+            
+            <div id="gameDetailsContent" class="space-y-6">
+                <!-- Content will be populated by JS -->
+            </div>
+            
+            <div class="mt-8">
+                <button id="joinGameBtn" class="w-full bg-black text-white py-4 text-lg font-medium hover:opacity-90">
+                    Записаться
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Game Form -->
+    <section id="createGame" class="container mx-auto px-4 py-12 hidden">
+        <h2 class="text-3xl font-bold text-black mb-8">Создать игру</h2>
+        
+        <div class="max-w-2xl">
+            <form id="createGameForm" class="space-y-6">
+                <div>
+                    <label for="createDate" class="block text-black font-medium mb-2">Дата</label>
+                    <input type="date" id="createDate" class="w-full px-4 py-3 border border-gray-300 focus:outline-none focus:border-black" required>
+                </div>
+                
+                <div>
+                    <label for="createTime" class="block text-black font-medium mb-2">Время</label>
+                    <input type="time" id="createTime" class="w-full px-4 py-3 border border-gray-300 focus:outline-none focus:border-black" required>
+                </div>
+                
+                <div>
+                    <label for="createDuration" class="block text-black font-medium mb-2">Длительность (часы)</label>
+                    <input type="number" id="createDuration" min="1" max="4" value="2" class="w-full px-4 py-3 border border-gray-300 focus:outline-none focus:border-black" required>
+                </div>
+                
+                <div>
+                    <label for="createLocation" class="block text-black font-medium mb-2">Площадка</label>
+                    <select id="createLocation" class="w-full px-4 py-3 border border-gray-300 focus:outline-none focus:border-black" required>
+                        <option value="">Выберите площадку</option>
+                        <option value="dostyk">Спорткомплекс "Достык" (ул. Достык, 13)</option>
+                        <option value="olympic">Зал "Олимпийский" (пр. Туран, 24)</option>
+                        <option value="energy">Фитнес клуб "Energy" (ул. Кунаева, 12/1)</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label for="createLevel" class="block text-black font-medium mb-2">Уровень</label>
+                    <select id="createLevel" class="w-full px-4 py-3 border border-gray-300 focus:outline-none focus:border-black" required>
+                        <option value="">Выберите уровень</option>
+                        <option value="beginner">Любительский</option>
+                        <option value="intermediate">Полупрофессиональный</option>
+                        <option value="pro">Турнирный</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label for="createFormat" class="block text-black font-medium mb-2">Формат</label>
+                    <select id="createFormat" class="w-full px-4 py-3 border border-gray-300 focus:outline-none focus:border-black" required>
+                        <option value="mix">Смешанный</option>
+                        <option value="male">Мужской</option>
+                        <option value="female">Женский</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label for="createPrice" class="block text-black font-medium mb-2">Цена с человека (₸)</label>
+                    <input type="number" id="createPrice" min="0" class="w-full px-4 py-3 border border-gray-300 focus:outline-none focus:border-black" required>
+                </div>
+                
+                <div>
+                    <label for="createMaxPlayers" class="block text-black font-medium mb-2">Максимум игроков</label>
+                    <input type="number" id="createMaxPlayers" min="6" max="20" value="12" class="w-full px-4 py-3 border border-gray-300 focus:outline-none focus:border-black" required>
+                </div>
+                
+                <button type="submit" class="w-full bg-black text-white py-4 text-lg font-medium hover:opacity-90">
+                    Создать игру
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <script>
+        // Games data
+        const games = {
+            1: {
+                sport: 'Волейбол',
+                location: 'Спорткомплекс "Достык"',
+                address: 'ул. Достык, 13',
+                date: 'Сегодня',
+                time: '18:00 - 20:00',
+                level: 'Любительский',
+                spots: { available: 5, total: 12 },
+                format: 'Смешанный',
+                price: 3500
+            },
+            2: {
+                sport: 'Волейбол',
+                location: 'Зал "Олимпийский"',
+                address: 'пр. Туран, 24',
+                date: 'Завтра',
+                time: '19:00 - 21:00',
+                level: 'Полупрофессиональный',
+                spots: { available: 3, total: 14 },
+                format: 'Смешанный',
+                price: 5000
+            },
+            3: {
+                sport: 'Волейбол',
+                location: 'Фитнес клуб "Energy"',
+                address: 'ул. Кунаева, 12/1',
+                date: 'Пт, 14 июл',
+                time: '20:00 - 22:30',
+                level: 'Любительский',
+                spots: { available: 8, total: 12 },
+                format: 'Смешанный',
+                price: 3500
+            },
+            4: {
+                sport: 'Волейбол',
+                location: 'Спорткомплекс "Достык"',
+                address: 'ул. Достык, 13',
+                date: 'Сб, 15 июл',
+                time: '18:00 - 20:00',
+                level: 'Полупрофессиональный',
+                spots: { available: 11, total: 14 },
+                format: 'Смешанный',
+                price: 5000
+            }
+        };
+
+        // Navigation
+        const showGamesBtn = document.getElementById('showGamesBtn');
+        const showCreateBtn = document.getElementById('showCreateBtn');
+        const gamesList = document.getElementById('gamesList');
+        const createGame = document.getElementById('createGame');
+
+        showGamesBtn.addEventListener('click', () => {
+            gamesList.classList.remove('hidden');
+            createGame.classList.add('hidden');
+        });
+
+        showCreateBtn.addEventListener('click', () => {
+            gamesList.classList.add('hidden');
+            createGame.classList.remove('hidden');
+        });
+
+        // Game details modal
+        const gameDetailsModal = document.getElementById('gameDetailsModal');
+        const gameDetailsContent = document.getElementById('gameDetailsContent');
+        const closeGameDetails = document.getElementById('closeGameDetails');
+        const joinGameBtn = document.getElementById('joinGameBtn');
+
+        // Show game details
+        document.querySelectorAll('.game-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const gameId = card.getAttribute('data-game-id');
+                const game = games[gameId];
+                
+                if (game) {
+                    gameDetailsContent.innerHTML = `
+                        <div>
+                            <span class="text-sm text-gray-500">${game.sport}</span>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-black mb-2">${game.location}</h3>
+                            <p class="text-gray-600">${game.address}</p>
+                        </div>
+                        <div class="space-y-3">
+                            <p class="text-black"><strong>Дата:</strong> ${game.date}</p>
+                            <p class="text-black"><strong>Время:</strong> ${game.time}</p>
+                            <p class="text-black"><strong>Уровень:</strong> ${game.level}</p>
+                            <p class="text-black"><strong>Формат:</strong> ${game.format}</p>
+                            <p class="text-black"><strong>Мест свободно:</strong> ${game.spots.available} из ${game.spots.total}</p>
+                            <p class="text-black text-xl"><strong>Цена:</strong> ${game.price} ₸</p>
+                        </div>
+                    `;
+                    
+                    joinGameBtn.setAttribute('data-game-id', gameId);
+                    gameDetailsModal.classList.remove('hidden');
+                }
+            });
+        });
+
+        // Close modal
+        closeGameDetails.addEventListener('click', () => {
+            gameDetailsModal.classList.add('hidden');
+        });
+
+        gameDetailsModal.addEventListener('click', (e) => {
+            if (e.target === gameDetailsModal) {
+                gameDetailsModal.classList.add('hidden');
+            }
+        });
+
+        // Join game
+        joinGameBtn.addEventListener('click', () => {
+            const gameId = joinGameBtn.getAttribute('data-game-id');
+            alert(`Вы записались на игру #${gameId}. (Демо-версия)`);
+            gameDetailsModal.classList.add('hidden');
+        });
+
+        // Create game form
+        const createGameForm = document.getElementById('createGameForm');
+        
+        createGameForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Игра создана! (Демо-версия)');
+            createGameForm.reset();
+            gamesList.classList.remove('hidden');
+            createGame.classList.add('hidden');
+        });
+    </script>
+</body>
+</html>
