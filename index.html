@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OYNA - Найти игру в волейбол</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         body {
             background: white;
@@ -34,74 +35,12 @@
     <main id="gamesList" class="container mx-auto px-4 py-12">
         <h2 class="text-3xl font-bold text-black mb-8">Игры</h2>
         
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Game Card 1 -->
-            <div class="game-card border border-gray-200 p-6 cursor-pointer" data-game-id="1">
-                <div class="mb-4">
-                    <span class="text-sm text-gray-500">Волейбол</span>
-                </div>
-                <h3 class="text-xl font-bold text-black mb-2">Спорткомплекс "Достык"</h3>
-                <p class="text-gray-600 mb-4">ул. Достык, 13</p>
-                <div class="space-y-2 mb-4">
-                    <p class="text-black"><strong>Дата:</strong> Сегодня, 18:00 - 20:00</p>
-                    <p class="text-black"><strong>Уровень:</strong> Любительский</p>
-                    <p class="text-black"><strong>Мест:</strong> <span class="text-gray-600">5 из 12</span></p>
-                </div>
-                <button class="w-full bg-black text-white py-3 font-medium hover:opacity-90">
-                    Смотреть
-                </button>
-            </div>
-
-            <!-- Game Card 2 -->
-            <div class="game-card border border-gray-200 p-6 cursor-pointer" data-game-id="2">
-                <div class="mb-4">
-                    <span class="text-sm text-gray-500">Волейбол</span>
-                </div>
-                <h3 class="text-xl font-bold text-black mb-2">Зал "Олимпийский"</h3>
-                <p class="text-gray-600 mb-4">пр. Туран, 24</p>
-                <div class="space-y-2 mb-4">
-                    <p class="text-black"><strong>Дата:</strong> Завтра, 19:00 - 21:00</p>
-                    <p class="text-black"><strong>Уровень:</strong> Полупрофессиональный</p>
-                    <p class="text-black"><strong>Мест:</strong> <span class="text-gray-600">3 из 14</span></p>
-                </div>
-                <button class="w-full bg-black text-white py-3 font-medium hover:opacity-90">
-                    Смотреть
-                </button>
-            </div>
-
-            <!-- Game Card 3 -->
-            <div class="game-card border border-gray-200 p-6 cursor-pointer" data-game-id="3">
-                <div class="mb-4">
-                    <span class="text-sm text-gray-500">Волейбол</span>
-                </div>
-                <h3 class="text-xl font-bold text-black mb-2">Фитнес клуб "Energy"</h3>
-                <p class="text-gray-600 mb-4">ул. Кунаева, 12/1</p>
-                <div class="space-y-2 mb-4">
-                    <p class="text-black"><strong>Дата:</strong> Пт, 14 июл, 20:00 - 22:30</p>
-                    <p class="text-black"><strong>Уровень:</strong> Любительский</p>
-                    <p class="text-black"><strong>Мест:</strong> <span class="text-gray-600">8 из 12</span></p>
-                </div>
-                <button class="w-full bg-black text-white py-3 font-medium hover:opacity-90">
-                    Смотреть
-                </button>
-            </div>
-
-            <!-- Game Card 4 -->
-            <div class="game-card border border-gray-200 p-6 cursor-pointer" data-game-id="4">
-                <div class="mb-4">
-                    <span class="text-sm text-gray-500">Волейбол</span>
-                </div>
-                <h3 class="text-xl font-bold text-black mb-2">Спорткомплекс "Достык"</h3>
-                <p class="text-gray-600 mb-4">ул. Достык, 13</p>
-                <div class="space-y-2 mb-4">
-                    <p class="text-black"><strong>Дата:</strong> Сб, 15 июл, 18:00 - 20:00</p>
-                    <p class="text-black"><strong>Уровень:</strong> Полупрофессиональный</p>
-                    <p class="text-black"><strong>Мест:</strong> <span class="text-gray-600">11 из 14</span></p>
-                </div>
-                <button class="w-full bg-black text-white py-3 font-medium hover:opacity-90">
-                    Смотреть
-                </button>
-            </div>
+        <div id="gamesContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Games will be loaded here dynamically -->
+        </div>
+        
+        <div id="noGamesMessage" class="hidden text-center py-12">
+            <p class="text-gray-600 text-lg">Пока нет доступных игр</p>
         </div>
     </main>
 
@@ -193,53 +132,185 @@
     </section>
 
     <script>
-        // Games data
-        const games = {
-            1: {
-                sport: 'Волейбол',
-                location: 'Спорткомплекс "Достык"',
-                address: 'ул. Достык, 13',
-                date: 'Сегодня',
-                time: '18:00 - 20:00',
-                level: 'Любительский',
-                spots: { available: 5, total: 12 },
-                format: 'Смешанный',
-                price: 3500
-            },
-            2: {
-                sport: 'Волейбол',
-                location: 'Зал "Олимпийский"',
-                address: 'пр. Туран, 24',
-                date: 'Завтра',
-                time: '19:00 - 21:00',
-                level: 'Полупрофессиональный',
-                spots: { available: 3, total: 14 },
-                format: 'Смешанный',
-                price: 5000
-            },
-            3: {
-                sport: 'Волейбол',
-                location: 'Фитнес клуб "Energy"',
-                address: 'ул. Кунаева, 12/1',
-                date: 'Пт, 14 июл',
-                time: '20:00 - 22:30',
-                level: 'Любительский',
-                spots: { available: 8, total: 12 },
-                format: 'Смешанный',
-                price: 3500
-            },
-            4: {
-                sport: 'Волейбол',
-                location: 'Спорткомплекс "Достык"',
-                address: 'ул. Достык, 13',
-                date: 'Сб, 15 июл',
-                time: '18:00 - 20:00',
-                level: 'Полупрофессиональный',
-                spots: { available: 11, total: 14 },
-                format: 'Смешанный',
-                price: 5000
+        // Supabase configuration
+        const SUPABASE_URL = 'https://eqdtwxupvkkrfrerruet.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_XP4ktwlcFNz9BDMgJt9M4Q_px4Iw9qh'; // Замените на ваш publishable key
+        
+        // Initialize Supabase client
+        const { createClient } = supabase;
+        const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        // Games data (will be loaded from Supabase)
+        let games = {};
+        
+        // Format date for display
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            
+            const isToday = date.toDateString() === today.toDateString();
+            const isTomorrow = date.toDateString() === tomorrow.toDateString();
+            
+            if (isToday) {
+                return 'Сегодня';
+            } else if (isTomorrow) {
+                return 'Завтра';
+            } else {
+                const options = { day: 'numeric', month: 'short' };
+                const weekdays = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
+                const weekday = weekdays[date.getDay()];
+                return `${weekday}, ${date.toLocaleDateString('ru-RU', options)}`;
             }
-        };
+        }
+        
+        // Format time for display
+        function formatTime(timeString) {
+            if (!timeString) return '';
+            return timeString.substring(0, 5); // HH:MM format
+        }
+        
+        // Format level name
+        function formatLevel(level) {
+            const levels = {
+                'beginner': 'Любительский',
+                'intermediate': 'Полупрофессиональный',
+                'pro': 'Турнирный'
+            };
+            return levels[level] || level;
+        }
+        
+        // Format format name
+        function formatFormat(format) {
+            const formats = {
+                'mix': 'Смешанный',
+                'male': 'Мужской',
+                'female': 'Женский'
+            };
+            return formats[format] || format;
+        }
+        
+        // Load games from Supabase
+        async function loadGames() {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('games')
+                    .select('*')
+                    .order('date', { ascending: true })
+                    .order('time_start', { ascending: true });
+                
+                if (error) {
+                    console.error('Error loading games:', error);
+                    return;
+                }
+                
+                if (!data || data.length === 0) {
+                    document.getElementById('gamesContainer').classList.add('hidden');
+                    document.getElementById('noGamesMessage').classList.remove('hidden');
+                    return;
+                }
+                
+                // Hide "no games" message
+                document.getElementById('noGamesMessage').classList.add('hidden');
+                document.getElementById('gamesContainer').classList.remove('hidden');
+                
+                // Store games in object for easy access
+                games = {};
+                data.forEach(game => {
+                    games[game.id] = game;
+                });
+                
+                // Render games
+                renderGames(data);
+                
+            } catch (error) {
+                console.error('Error loading games:', error);
+            }
+        }
+        
+        // Render games to the page
+        function renderGames(gamesData) {
+            const container = document.getElementById('gamesContainer');
+            container.innerHTML = '';
+            
+            gamesData.forEach(game => {
+                const availableSpots = game.max_players - (game.current_players || 0);
+                const dateFormatted = formatDate(game.date);
+                const timeFormatted = `${formatTime(game.time_start)} - ${formatTime(game.time_end)}`;
+                const levelFormatted = formatLevel(game.level);
+                
+                const gameCard = document.createElement('div');
+                gameCard.className = 'game-card border border-gray-200 p-6 cursor-pointer';
+                gameCard.setAttribute('data-game-id', game.id);
+                
+                gameCard.innerHTML = `
+                    <div class="mb-4">
+                        <span class="text-sm text-gray-500">Волейбол</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-black mb-2">${game.location || ''}</h3>
+                    <p class="text-gray-600 mb-4">${game.address || ''}</p>
+                    <div class="space-y-2 mb-4">
+                        <p class="text-black"><strong>Дата:</strong> ${dateFormatted}, ${timeFormatted}</p>
+                        <p class="text-black"><strong>Уровень:</strong> ${levelFormatted}</p>
+                        <p class="text-black"><strong>Мест:</strong> <span class="text-gray-600">${availableSpots} из ${game.max_players}</span></p>
+                    </div>
+                    <button class="w-full bg-black text-white py-3 font-medium hover:opacity-90">
+                        Смотреть
+                    </button>
+                `;
+                
+                container.appendChild(gameCard);
+            });
+            
+            // Re-attach event listeners for game cards
+            attachGameCardListeners();
+        }
+        
+        // Attach click listeners to game cards
+        function attachGameCardListeners() {
+            document.querySelectorAll('.game-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const gameId = parseInt(card.getAttribute('data-game-id'));
+                    const game = games[gameId];
+                    
+                    if (game) {
+                        showGameDetails(game);
+                    }
+                });
+            });
+        }
+        
+        // Show game details in modal
+        function showGameDetails(game) {
+            const availableSpots = game.max_players - (game.current_players || 0);
+            const dateFormatted = formatDate(game.date);
+            const timeFormatted = `${formatTime(game.time_start)} - ${formatTime(game.time_end)}`;
+            const levelFormatted = formatLevel(game.level);
+            const formatFormatted = formatFormat(game.format);
+            
+            gameDetailsContent.innerHTML = `
+                <div>
+                    <span class="text-sm text-gray-500">Волейбол</span>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-bold text-black mb-2">${game.location || ''}</h3>
+                    <p class="text-gray-600">${game.address || ''}</p>
+                    ${game.city ? `<p class="text-gray-600 mt-1">${game.city}</p>` : ''}
+                </div>
+                <div class="space-y-3">
+                    <p class="text-black"><strong>Дата:</strong> ${dateFormatted}</p>
+                    <p class="text-black"><strong>Время:</strong> ${timeFormatted}</p>
+                    <p class="text-black"><strong>Уровень:</strong> ${levelFormatted}</p>
+                    <p class="text-black"><strong>Формат:</strong> ${formatFormatted}</p>
+                    <p class="text-black"><strong>Мест свободно:</strong> ${availableSpots} из ${game.max_players}</p>
+                    <p class="text-black text-xl"><strong>Цена:</strong> ${game.price || 0} ₸</p>
+                </div>
+            `;
+            
+            joinGameBtn.setAttribute('data-game-id', game.id);
+            gameDetailsModal.classList.remove('hidden');
+        }
 
         // Navigation
         const showGamesBtn = document.getElementById('showGamesBtn');
@@ -263,36 +334,8 @@
         const closeGameDetails = document.getElementById('closeGameDetails');
         const joinGameBtn = document.getElementById('joinGameBtn');
 
-        // Show game details
-        document.querySelectorAll('.game-card').forEach(card => {
-            card.addEventListener('click', () => {
-                const gameId = card.getAttribute('data-game-id');
-                const game = games[gameId];
-                
-                if (game) {
-                    gameDetailsContent.innerHTML = `
-                        <div>
-                            <span class="text-sm text-gray-500">${game.sport}</span>
-                        </div>
-                        <div>
-                            <h3 class="text-2xl font-bold text-black mb-2">${game.location}</h3>
-                            <p class="text-gray-600">${game.address}</p>
-                        </div>
-                        <div class="space-y-3">
-                            <p class="text-black"><strong>Дата:</strong> ${game.date}</p>
-                            <p class="text-black"><strong>Время:</strong> ${game.time}</p>
-                            <p class="text-black"><strong>Уровень:</strong> ${game.level}</p>
-                            <p class="text-black"><strong>Формат:</strong> ${game.format}</p>
-                            <p class="text-black"><strong>Мест свободно:</strong> ${game.spots.available} из ${game.spots.total}</p>
-                            <p class="text-black text-xl"><strong>Цена:</strong> ${game.price} ₸</p>
-                        </div>
-                    `;
-                    
-                    joinGameBtn.setAttribute('data-game-id', gameId);
-                    gameDetailsModal.classList.remove('hidden');
-                }
-            });
-        });
+        // Load games when page loads
+        loadGames();
 
         // Close modal
         closeGameDetails.addEventListener('click', () => {
